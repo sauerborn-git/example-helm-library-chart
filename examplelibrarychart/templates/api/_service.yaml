@@ -1,3 +1,4 @@
+{{- define "examplelibrarychart.api.service" -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,11 +6,12 @@ metadata:
   labels:
     {{- include "examplelibrarychart.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ (.Values.service).type | default "ClusterIP" }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ (.Values.service).port | default 80 }}
       targetPort: http
       protocol: TCP
       name: http
   selector:
     {{- include "examplelibrarychart.selectorLabels" . | nindent 4 }}
+{{- end -}}

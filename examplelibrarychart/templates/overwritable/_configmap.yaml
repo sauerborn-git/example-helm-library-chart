@@ -1,0 +1,25 @@
+{{- define "examplelibrarychart.overwritable.configmap.tpl" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-cm
+data:
+  index.html: |-
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to Default ConfigMap nginx!</title>
+    <style>
+    html { color-scheme: light dark; }
+    body { width: 35em; margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif; }
+    </style>
+    </head>
+    <body>
+    <h1>Welcome to Default ConfigMap nginx!</h1>
+    </body>
+    </html>
+{{- end -}}
+{{- define "examplelibrarychart.overwritable.configmap" -}}
+{{- include "examplelibrarychart.util.merge" (append . "examplelibrarychart.overwritable.configmap.tpl") -}}
+{{- end -}}

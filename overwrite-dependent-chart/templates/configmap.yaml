@@ -1,0 +1,6 @@
+{{- include "examplelibrarychart.overwritable.configmap" (list . "overwrite-dependent-chart.configmap.overwrite") -}}
+{{- define "overwrite-dependent-chart.configmap.overwrite" -}}
+metadata:
+  annotations:
+    overwritten: "true"
+{{- end -}}

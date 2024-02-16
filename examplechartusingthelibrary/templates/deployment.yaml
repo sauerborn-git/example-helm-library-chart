@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: examplechartusingthelibrary-deployment
+  labels:
+    {{- include "examplelibrarychart.labels" . | nindent 4 }}
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "examplelibrarychart.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: examplechartusingthelibrary
+          image: "nginx:1.16.0"
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP

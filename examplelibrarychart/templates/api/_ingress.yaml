@@ -1,0 +1,38 @@
+{{- define "examplelibrarychart.api.ingress" -}}
+{{- $fullName := include "examplelibrarychart.fullname" . -}}
+{{- $svcPort := (.Values.service).port | default 80 -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "examplelibrarychart.labels" . | nindent 4 }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: {{.Release.Namespace}}-{{ $fullName }}-stripprefix@kubernetescrd
+    {{- with (.Values.ingress).annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ingressClassName: {{ (.Values.ingress).className | default "traefik"}}
+  rules:
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          - path: {{ .path | default (printf "%s%s" "/" .Chart.Name)}}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+---
+# Strip prefix /foobar and /fiibar
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - {{ .path | default (printf "%s%s" "/" .Chart.Name)}}
+{{- end }}
