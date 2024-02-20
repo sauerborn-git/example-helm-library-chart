@@ -1,0 +1,3 @@
+Successfully installed, microservice should be accessible soon on:
+  https://{{ (.Values.ingress).host }}/{{ .Chart.Name }}
+
