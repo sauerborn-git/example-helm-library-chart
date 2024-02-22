@@ -15,7 +15,7 @@ metadata:
 spec:
   ingressClassName: {{ (.Values.ingress).className | default "traefik"}}
   rules:
-    - host: {{ .host | quote }}
+    - host: {{ (.Values.ingress).host | required "A valid .Values.ingress.host entry required!" | quote }}
       http:
         paths:
           - path: {{ .path | default (printf "%s%s" "/" .Chart.Name)}}
